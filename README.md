@@ -7,7 +7,9 @@ Azure Blob Storage → Create Resource → Storage Account → create a containe
 Collect these values from the Portal:
 
 AI Search: endpoint URL + Admin API key
+
 Blob Storage: connection string
+
 Azure OpenAI: endpoint + API key + deployment names for text-embedding-ada-002 and gpt-4o
 
 Step 2 — Install dependencies
