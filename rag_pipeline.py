@@ -13,7 +13,7 @@ from azure.search.documents.models import VectorizedQuery
 from azure.core.credentials import AzureKeyCredential
 from azure.storage.blob import BlobServiceClient
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from openai import AzureOpenAI
 import uuid
 
@@ -102,6 +102,15 @@ def ingest_pdf(pdf_path: str):
 
     loader = PyPDFLoader(pdf_path)
     pages = loader.load()
+    print(f"   → {len(pages)} pages loaded")
+    
+    # Debug: Check if pages have content
+    total_content_length = sum(len(page.page_content) for page in pages)
+    print(f"   → Total content length: {total_content_length} characters")
+    
+    if total_content_length == 0:
+        print(f"   ⚠️  No extractable text found in PDF. It may be a scanned/image-based PDF.")
+        return
 
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
@@ -197,7 +206,7 @@ if __name__ == "__main__":
 
     # 2. Ingest your PDFs
     import glob
-    pdf_files = glob.glob("./pdfs/*.pdf")
+    pdf_files = glob.glob("./*.pdf")
     for pdf in pdf_files:
         ingest_pdf(pdf)
 
